@@ -17,12 +17,13 @@ class TasksController extends Controller
             $tasks = $query->where('done',false)->get();
         }
 
-        dump(DB::getQueryLog());
         return view('welcome',['tasks'=>$tasks]);
     }
 
     public function create(Request $request){
-        $task = $request->input();
+        $task = $request->validate([
+            'task'=>'required|max:100'
+        ]);
         Task::create($task);
         return redirect(route('tasks.index'));
     }
@@ -39,4 +40,5 @@ class TasksController extends Controller
         $task->update();
         return redirect(route('tasks.index'));
     }
+
 }
